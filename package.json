@@ -1,6 +1,11 @@
 {
   "name": "nil-admin",
-  "version": "0.0.0",
+  "version": "0.0.1",
+  "author": {
+    "name": "NilBrains",
+    "email": "me@nilbrains.com",
+    "url": "https://www.nilbrains.com"
+  },
   "scripts": {
     "dev": "vite --host",
     "build": "vue-tsc --noEmit && vite build",
