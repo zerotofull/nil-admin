@@ -41,6 +41,15 @@ const AuthRouter = {
                 realPath: "/auth/menu"
             },
         },
+        {
+            path: '/auth/pass',
+            name: "AuthPass",
+            component: () => import('@/views/auth/change.password.vue'),
+            meta: {
+                title: "修改密码",
+                realPath: "/auth/pass"
+            },
+        },
     ],
 
 

@@ -2,6 +2,7 @@
   <div class="app-container">
 
     <el-card shadow="hover">
+
       <div class="nil-header-container">
         <div class=""><span>数据列表</span></div>
         <div class="">
@@ -9,19 +10,30 @@
         </div>
       </div>
 
+      <div class="topTip">
+        <el-alert title="修改、删除 菜单并不会直接改变侧边栏。需要重新加载页面。" type="warning" :closable="false"/>
+      </div>
+
       <el-table :data="menus" stripe border style="width: 100%;margin-bottom: 20px;" row-key="id" default-expand-all>
+
         <el-table-column prop="name" label="菜单名称"/>
+        <el-table-column prop="icon" label="图标" width="40px">
+          <template #default="scope">
+            <i :class="[nilIcons.font_family,scope.row.icon]"></i>
+          </template>
+        </el-table-column>
         <el-table-column prop="path" label="菜单路径"/>
+        <el-table-column prop="sort" label="排序"/>
         <el-table-column label="操作">
           <template #default="scope">
 
-            <el-button size="mini" @click="showChangeBox(scope.row)">
+            <el-button @click="showChangeBox(scope.row)">
               修改
             </el-button>
 
             <el-button
-                size="mini"
                 type="danger"
+                @click="deleteIt(scope.row)"
             >
               删除
             </el-button>
@@ -41,7 +53,21 @@
 
         <el-scrollbar class="nil-drawer-body">
 
+
           <el-form ref="form" :model="oneMenusData" label-width="120px">
+
+            <el-form-item label="快速填写" v-if="!isChange">
+              <el-select v-model="menusHintValSelect" placeholder="请选择菜单" style="width: 100%" @change="menuHintSelect">
+                <el-option
+                    v-for="(item,index) in menusHint"
+                    :key="index"
+                    :label="item.name"
+                    :value="index"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+
             <el-form-item label="菜单名称">
               <el-input v-model="oneMenusData.name"></el-input>
             </el-form-item>
@@ -63,7 +89,31 @@
             </el-form-item>
 
             <el-form-item label="菜单图标">
-              <el-input v-model="oneMenusData.icon"></el-input>
+              <el-select v-model="oneMenusData.icon" placeholder="Select"  style="width: 100%"  filterable>
+                <template #prefix>
+                  <div style="color: #409EFF">
+                    <i :class="[nilIcons.font_family, oneMenusData.icon]"></i>
+                  </div>
+                </template>
+                <div class="icons">
+                  <el-option
+                      v-for="item in nilIcons.glyphs"
+                      :key="item.icon_id"
+                      :label="item.name"
+                      :value="`${nilIcons.css_prefix_text}${item.font_class}`"
+                  >
+                    <div class="item">
+                      <i :class="`${nilIcons.font_family} ${nilIcons.css_prefix_text}${item.font_class}`"></i>
+                      <div class="iconName">{{ item.name }}</div>
+                    </div>
+                  </el-option>
+                </div>
+              </el-select>
+
+            </el-form-item>
+
+            <el-form-item label="排序">
+              <el-input v-model="oneMenusData.sort" type="number"></el-input>
             </el-form-item>
 
             <el-form-item>
@@ -79,13 +129,17 @@
 </template>
 
 <script>
-import {addMenu, authMenus, changeMenu} from "../../api/auth";
-import {ElMessage} from "element-plus";
+import {addMenu, authMenus, changeMenu, deleteMenu} from "../../api/auth";
+import {ElMessage, ElMessageBox} from "element-plus";
+import {mapActions} from "pinia";
+import {useUserStore} from "../../store/user";
+import {nilIcons} from "../../plugins/nil.icons";
 
 export default {
   name: "AuthMenu",
   data() {
     return {
+      nilIcons: nilIcons,
       menus: [],
       isChange: false,
       AddAndChangeMenusBox: false, // 是否显示 menu Panel
@@ -94,14 +148,58 @@ export default {
         pid: 0,
         name: "",
         path: "",
-        icon: ""
-      }
+        icon: "",
+        sort: 0
+      },
+      menusHint: [],
+      menusHintValSelect: ""
     }
   },
   created() {
     this.getMenus()
+    this.getMenuHints()
   },
   methods: {
+    ...mapActions(useUserStore, ["ganHintMenus"]),
+    async getMenuHints() {
+      this.menusHint = await this.ganHintMenus()
+    },
+    menuHintSelect(val) {
+      const temp = this.menusHint[val]
+      this.oneMenusData.name = temp.name || ""
+      this.oneMenusData.path = temp.path || ""
+    },
+    //删除 他
+    deleteIt(row) {
+      ElMessageBox.confirm(
+          '是否要进行 删除 操作, 是否继续?',
+          '提示',
+          {
+            confirmButtonText: '确认',
+            cancelButtonText: '取消',
+            type: 'warning',
+          }
+      )
+          .then(() => {
+            deleteMenu(row.id).then(res => {
+              if (res.success) {
+                ElMessage({
+                  type: 'success',
+                  message: '删除成功',
+                })
+                this.getMenus()
+              } else {
+                ElMessage({
+                  type: 'error',
+                  message: res.message,
+                })
+              }
+            })
+          })
+          .catch(() => {
+
+          })
+    },
     //打开修改的面板
     showChangeBox(row) {
       this.isChange = true
@@ -110,7 +208,8 @@ export default {
         name: row.name,
         path: row.path,
         icon: row.icon,
-        id: row.id
+        id: row.id,
+        sort: row.sort
       }
       this.AddAndChangeMenusBox = true;
     },
@@ -122,7 +221,8 @@ export default {
         name: "",
         path: "",
         icon: "",
-        id: ""
+        id: "",
+        sort: 0
       }
       this.AddAndChangeMenusBox = true;
     },
@@ -182,9 +282,11 @@ export default {
           })
 
           const temp = target[0]
-          temp.forEach((item, index) => {
-            item.children = target[item.id]
-          })
+          if (temp) {
+            temp.forEach((item, index) => {
+              item.children = target[item.id]
+            })
+          }
 
           this.menus = temp;
           this.menuOptions = targetOptions;
@@ -196,6 +298,37 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.topTip {
+  margin-bottom: 20px;
+}
 
+.icons {
+  grid-template-columns: repeat(6, 1fr);
+  padding: 5px 5px;
+  display: grid;
+  grid-row-gap: 5px;
+  grid-column-gap: 5px;
+  .el-select-dropdown__item {
+    height: auto;
+    padding: 0;
+  }
+  .item {
+    text-align: center;
+    border: 1px solid rgba(0, 0, 0, 0);
+    color: #999;
+    border-radius: 5px;
+    height: 60px;
+    transition: all .4s;
+    padding: 5px 5px;
+
+    i {
+      font-size: 18px;
+    }
+
+    .iconName {
+      font-size: 12px;
+    }
+  }
+}
 </style>

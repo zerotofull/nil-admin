@@ -7,10 +7,10 @@ export function authUsers(data) {
     params: data
   })
 }
-
+//
 export function authUsersStatus(data) {
   return request({
-    url: "/admin/auth/users/status",
+    url: "/auth/admin/user/status",
     method: 'POST',
     data
   })
@@ -23,13 +23,6 @@ export function authRoles() {
   })
 }
 
-export function authUsersUpdateRole(data) {
-  return request({
-    url: "/admin/auth/users/role",
-    method: 'POST',
-    data
-  })
-}
 // 
 export function authMenus() {
   return request({
@@ -55,11 +48,52 @@ export function changeMenu(data) {
   })
 }
 
-///auth/admin/role/menus
+///auth/admin/role
 export function changeRoleMenu(data) {
   return request({
-    url: `/auth/admin/role/menus`,
+    url: `/auth/admin/role`,
+    method: "PUT",
+    data
+  })
+}
+
+export function addRoleMenu(data) {
+  return request({
+    url: `/auth/admin/role`,
     method: "POST",
+    data
+  })
+}
+
+///auth/admin/menu/{id}
+export function deleteMenu(id:string) {
+  return request({
+    url: `/auth/admin/menu/${id}`,
+    method: "DELETE"
+  })
+}
+
+///auth/admin/role/{id}
+export function deleteRole(id:string) {
+  return request({
+    url: `/auth/admin/role/${id}`,
+    method: "DELETE"
+  })
+}
+
+///auth/admin/user
+export function createUser(data) {
+  return request({
+    url: `/auth/admin/user`,
+    method: "POST",
+    data
+  })
+}
+
+export function changeUser(data) {
+  return request({
+    url: `/auth/admin/user`,
+    method: "PUT",
     data
   })
 }

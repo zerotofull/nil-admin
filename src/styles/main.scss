@@ -1,5 +1,9 @@
 @import "transition";
 
+//icon啦
+
+@import url("//at.alicdn.com/t/font_2953557_at8a6kl3yjh.css");
+
 // page set
 $menuText:#bfcbd9;
 $menuActiveText:#409EFF;
@@ -298,6 +302,10 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  > div > span {
+    font-weight: bold;
+    font-size: 1.2em;
+  }
 }
 
 .nil-drawer {

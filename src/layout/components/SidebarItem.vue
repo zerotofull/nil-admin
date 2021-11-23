@@ -4,7 +4,9 @@
         v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
       <router-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
         <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
-          <el-icon class="sub-el-icon"><Camera /></el-icon>
+          <el-icon class="sub-el-icon">
+            <i :class="[ICON_PREFIX,onlyOneChild.meta.icon]"></i>
+          </el-icon>
           <template #title> {{ onlyOneChild.meta.title }} </template>
         </el-menu-item>
       </router-link>
@@ -12,7 +14,9 @@
 
     <el-sub-menu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
       <template #title >
-        <el-icon class="sub-el-icon"><Camera /></el-icon>
+        <el-icon class="sub-el-icon">
+          <i :class="[ICON_PREFIX,item.meta.icon]"></i>
+        </el-icon>
         <span v-if="item.meta"> {{ item.meta.title }} </span>
       </template>
       <sidebar-item
@@ -31,6 +35,7 @@
 import path from "path";
 import {isExternal} from "@/utils/validate";
 import { Camera } from '@element-plus/icons'
+import {ICON_PREFIX} from "@/setting";
 
 export default {
   name: "SidebarItem",
@@ -54,6 +59,7 @@ export default {
   },
   data() {
     return {
+      ICON_PREFIX,
       onlyOneChild: null
     }
   },

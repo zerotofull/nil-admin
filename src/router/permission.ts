@@ -1,6 +1,5 @@
-import {Router, RouteRecordRaw} from 'vue-router'
+import {Router} from 'vue-router'
 import {useUserStore} from "@/store/user";
-import {ErrorPageRoute} from "@/router/base";
 
 
 const whiteList = ["/login"]

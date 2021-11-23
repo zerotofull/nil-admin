@@ -1,11 +1,13 @@
 import axios from 'axios'
 import {useUserStore} from "../store/user";
 import { ElNotification } from 'element-plus'
+import { BASE_API,BASE_API_TIMEOUT } from '@/setting';
+import {ApiReturn} from "@/types/user";
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: 'http://localhost:8080', // api 的 base_url
-  timeout: 5000 // 请求超时时间
+  baseURL: BASE_API, // api 的 base_url
+  timeout: BASE_API_TIMEOUT // 请求超时时间
 })
 
 // request拦截器
@@ -24,7 +26,7 @@ service.interceptors.request.use(
 
 // response 拦截器
 service.interceptors.response.use(
-  response => {
+    (response:ApiReturn) => {
     return response.data
   },
   error => {

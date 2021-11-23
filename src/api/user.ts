@@ -23,3 +23,23 @@ export function userMenu(role:any) {
     }
   })
 }
+
+///auth/admin/user/password
+
+export function changeUserPass(data) {
+  return request({
+    url: "/auth/admin/user/password",
+    method: 'POST',
+    data: data
+  })
+}
+
+export function reUserpass(uid) {
+  return request({
+    url: "/auth/admin/user/repass",
+    method: 'POST',
+    data: {
+      uid
+    }
+  })
+}
