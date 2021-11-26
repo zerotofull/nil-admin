@@ -1,6 +1,6 @@
 # NIL-ADMIN
 
-这是一个基于`Vite``TS``Element-UI`的超级简单的后台管理前端框架。
+这是一个基于`Vite` `TS` `Element-UI`的超级简单的后台管理前端框架。
 
 ## 功能
 
