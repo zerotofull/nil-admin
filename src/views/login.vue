@@ -66,6 +66,7 @@ import { page } from '@/utils/constant'
 import { ElMessage } from 'element-plus'
 import { mapActions, mapStores } from 'pinia'
 import { useUserStore } from '@/store/user'
+import {ApiReturnData} from "@/types/user";
 
 export default {
   name: 'Login',
@@ -104,7 +105,7 @@ export default {
       this.$refs.loginForm.validate((valid: any) => {
         if (valid) {
           this.loading = true
-          userLogin(this.loginForm).then((res) => {
+          userLogin(this.loginForm).then((res :ApiReturnData) => {
             if (res.success) {
               this.loading = false
               ElMessage({

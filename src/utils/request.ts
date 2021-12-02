@@ -1,8 +1,8 @@
 import axios from 'axios'
-import { useUserStore } from '../store/user'
+import { useUserStore } from '@/store/user'
 import { ElNotification } from 'element-plus'
 import { BASE_API, BASE_API_TIMEOUT } from '@/setting'
-import { ApiReturn } from '@/types/user'
+import {ApiReturn} from '@/types/user'
 
 // 创建axios实例
 const service = axios.create({
@@ -26,7 +26,7 @@ service.interceptors.request.use(
 
 // response 拦截器
 service.interceptors.response.use(
-  (response: ApiReturn) => {
+  (response: ApiReturn)  => {
     return response.data
   },
   (error) => {

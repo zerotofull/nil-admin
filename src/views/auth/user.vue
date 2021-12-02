@@ -113,6 +113,7 @@
 import {authRoles, authUsers, authUsersStatus, changeUser, createUser} from "@/api/auth";
 import {ElMessage, ElMessageBox} from "element-plus";
 import {reUserpass} from "@/api/user";
+import { ApiReturnData } from "@/types/user";
 
 export default {
   name: "AuthMenu",
@@ -175,7 +176,7 @@ export default {
       )
           .then(() => {
 
-            reUserpass(row.id).then(res => {
+            reUserpass(row.id).then((res :ApiReturnData) => {
               if (res.success) {
                 ElMessage({
                   type: 'success',
@@ -200,7 +201,7 @@ export default {
       console.log(this.oneUserData)
 
       if (this.isChange) {
-        changeUser(this.oneUserData).then(res => {
+        changeUser(this.oneUserData).then((res :ApiReturnData) => {
           if (res.success) {
             ElMessage({
               message: "修改成功",
@@ -216,7 +217,7 @@ export default {
           }
         })
       }else{
-        createUser(this.oneUserData).then(res => {
+        createUser(this.oneUserData).then((res :ApiReturnData) => {
           if (res.success) {
             ElMessage({
               message: "创建成功",

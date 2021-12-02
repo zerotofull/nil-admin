@@ -77,8 +77,9 @@
 </template>
 
 <script lang="ts">
-import {addRoleMenu, authMenus, authRoles, changeRoleMenu, deleteMenu, deleteRole} from "@/api/auth";
+import {addRoleMenu, authMenus, authRoles, changeRoleMenu, deleteRole} from "@/api/auth";
 import {userMenu} from "@/api/user";
+import { ApiReturnData } from "@/types/user";
 import {ElMessage, ElMessageBox} from "element-plus";
 
 export default {
@@ -132,7 +133,7 @@ export default {
       console.log({upData})
 
       if (this.isChange) {
-        changeRoleMenu(upData).then(res => {
+        changeRoleMenu(upData).then((res :ApiReturnData) => {
           if (res.success) {
             ElMessage({
               message: "修改成功",
@@ -148,7 +149,7 @@ export default {
           }
         })
       } else {
-        addRoleMenu(upData).then(res => {
+        addRoleMenu(upData).then((res :ApiReturnData) => {
           if (res.success) {
             ElMessage({
               message: "创建成功",
@@ -167,7 +168,7 @@ export default {
 
     },
     getMenus() {
-      authMenus().then(res => {
+      authMenus().then((res :ApiReturnData) => {
         if (res.success) {
           const data = res.data
           const target = {}

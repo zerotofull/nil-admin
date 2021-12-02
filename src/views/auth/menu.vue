@@ -128,12 +128,13 @@
   </div>
 </template>
 
-<script>
-import {addMenu, authMenus, changeMenu, deleteMenu} from "../../api/auth";
+<script lang="ts">
+import {addMenu, authMenus, changeMenu, deleteMenu} from "@/api/auth";
 import {ElMessage, ElMessageBox} from "element-plus";
 import {mapActions} from "pinia";
-import {useUserStore} from "../../store/user";
-import {nilIcons} from "../../plugins/nil.icons";
+import {useUserStore} from "@/store/user";
+import {nilIcons} from "@/plugins/nil.icons";
+import {ApiReturnData} from "@/types/user";
 
 export default {
   name: "AuthMenu",
@@ -265,7 +266,7 @@ export default {
       }
     },
     getMenus() {
-      authMenus().then(res => {
+      authMenus().then((res :ApiReturnData) => {
         if (res.success) {
           const data = res.data
 

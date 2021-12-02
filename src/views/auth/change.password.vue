@@ -52,6 +52,7 @@ import {changeUserPass} from "@/api/user";
 import {mapActions, mapState} from "pinia";
 import {useUserStore} from "@/store/user";
 import {ElMessage} from "element-plus";
+import {ApiReturnData} from "@/types/user";
 
 export default {
   name: "ChangePassword",
@@ -105,7 +106,7 @@ export default {
           console.log("changePass === > ", this.oneChangePassData)
           let upData = this.oneChangePassData;
           upData.uid = this.userinfo.uid||""
-          changeUserPass(upData).then(res => {
+          changeUserPass(upData).then((res :ApiReturnData) => {
             if (res.success) {
               ElMessage({
                 type: 'success',

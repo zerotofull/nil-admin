@@ -1,17 +1,17 @@
 import {AxiosResponse} from "axios";
 
-interface UserInfo {
+export interface UserInfo {
     uid?: string,
     username?: string,
     role?: string
 }
 
-interface ApiReturnData {
+export interface ApiReturnData {
     success?: boolean,
     message?: string,
     data?: any,
     code?: number
 }
-interface ApiReturn extends AxiosResponse<ApiReturnData>{
+export interface ApiReturn extends AxiosResponse<ApiReturnData>{
     data: ApiReturnData
 }
