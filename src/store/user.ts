@@ -2,6 +2,7 @@ import {defineStore} from 'pinia'
 import {userinfo, userMenu} from "@/api/user";
 import {asyncRoutes, constantRouter} from "@/router";
 import {RouteRecordRaw} from "vue-router";
+import {ApiReturnData} from "@/types/user";
 
 function hasPermission(menus, route) {
     if (route.meta && route.meta.realPath) {
@@ -16,8 +17,8 @@ function filterAsyncRoutes(asyncRoutes: RouteRecordRaw[], menus: any[], menusDat
     asyncRoutes.forEach((route) => {
         const tmp = {...route}
         if (hasPermission(menus, tmp)) {
-            tmp.meta.title = menusData[`${route.meta.realPath}`].name
-            tmp.meta.icon = menusData[`${route.meta.realPath}`].icon
+            tmp.meta.title = menusData[`${route.meta.realPath}`]?.name ?? ""
+            tmp.meta.icon = menusData[`${route.meta.realPath}`]?.icon ?? ""
             if (tmp.children) {
                 tmp.children = filterAsyncRoutes(tmp.children, menus, menusData)
             }
@@ -81,7 +82,7 @@ export const useUserStore = defineStore('user', {
         },
         async getUserInfo() {
             return new Promise((resolve, reject) => {
-                userinfo().then(res => {
+                userinfo().then((res: ApiReturnData) => {
                     if (res.success) {
                         const {id, username, roleId,name} = res.data
                         this.userinfo.name = name

@@ -1,5 +1,7 @@
 import {Router} from 'vue-router'
 import {useUserStore} from "@/store/user";
+import {UserInfo} from "@/types/user";
+import {ErrorPageRoute} from "@/router/base";
 
 
 const whiteList = ["/login"]
@@ -30,7 +32,8 @@ export function createRouterGuards(router: Router) {
                     accessRoutes.forEach(item => {
                         router.addRoute(item)
                     })
-
+                    // 404 页面
+                    router.addRoute(ErrorPageRoute)
                     next({ ...to, replace: true })
                 } catch (e) {
                     console.log(e)

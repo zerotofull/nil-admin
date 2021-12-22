@@ -181,7 +181,7 @@ export default {
           })
           const temp = target[0]
           if (temp) {
-            temp.forEach((item, index) => {
+            temp.forEach((item) => {
               item.children = target[item.id]
             })
           }
@@ -190,7 +190,7 @@ export default {
       })
     },
     getRoles() {
-      authRoles().then(res => {
+      authRoles().then((res:ApiReturnData) => {
         if (res.success) {
           this.roles = res.data
         }
@@ -209,7 +209,7 @@ export default {
       this.nowSelectRole = row.id
       this.nowRoleMenuKeys = []
 
-      userMenu(row.id).then(res => {
+      userMenu(row.id).then((res:ApiReturnData) => {
         if (res.success) {
           let temp = []
           const target = {}
@@ -223,7 +223,7 @@ export default {
           console.log("nilbrains === >target === >", target)
           const filter = target[0]
           if (filter) {
-            filter.forEach((item, index) => {
+            filter.forEach((item) => {
               if (target[item]) {
                 temp.push(...target[item])
               } else {
@@ -251,7 +251,7 @@ export default {
           }
       )
           .then(() => {
-            deleteRole(row.id).then(res => {
+            deleteRole(row.id).then((res:ApiReturnData) => {
               if (res.success) {
                 ElMessage({
                   type: 'success',
